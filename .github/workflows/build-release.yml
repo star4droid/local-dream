@@ -30,7 +30,7 @@ jobs:
           sudo apt-get install -y ninja-build ccache
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -58,6 +58,8 @@ jobs:
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          # Set QNN_SDK_ROOT if Qualcomm QAIRT (QNN) SDK 2.39.0 is installed/downloaded in CI
+          # QNN_SDK_ROOT: ${{ github.workspace }}/qairt/2.39.0.250926
 
       - name: Build Release APK
         run: |
