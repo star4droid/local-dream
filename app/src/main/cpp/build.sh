@@ -10,7 +10,17 @@ if [ -z "$ANDROID_NDK_ROOT" ]; then
   fi
 fi
 
+if [ -z "$QNN_SDK_ROOT" ]; then
+  QNN_SDK_ROOT="/data/qairt/2.39.0.250926"
+fi
+
+if [ ! -d "$QNN_SDK_ROOT" ]; then
+  echo "::warning::Qualcomm QAIRT SDK directory '$QNN_SDK_ROOT' not found. Skipping native C++ QNN compilation."
+  exit 0
+fi
+
 echo "Using ANDROID_NDK_ROOT: $ANDROID_NDK_ROOT"
+echo "Using QNN_SDK_ROOT: $QNN_SDK_ROOT"
 
 rm -rf build/android
 

@@ -71,7 +71,7 @@ if(EXISTS "${QNN_SDK_ROOT}")
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
 else()
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SampleApp")
-        message(FATAL_ERROR "Qualcomm QAIRT SDK directory '${QNN_SDK_ROOT}' was not found. Please set QNN_SDK_ROOT environment variable or CMake parameter pointing to Qualcomm AI Engine Direct (QNN) SDK 2.39.0.")
+        message(WARNING "Qualcomm QAIRT SDK directory '${QNN_SDK_ROOT}' was not found. Skipping QNN compilation.")
     endif()
 endif()
 
