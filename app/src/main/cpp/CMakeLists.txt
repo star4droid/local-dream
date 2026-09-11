@@ -5,61 +5,75 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QNN SDK PATH
-set(QNN_SDK_ROOT /data/qairt/2.39.0.250926)
+if(NOT DEFINED QNN_SDK_ROOT)
+    if(DEFINED ENV{QNN_SDK_ROOT})
+        set(QNN_SDK_ROOT $ENV{QNN_SDK_ROOT})
+    else()
+        set(QNN_SDK_ROOT /data/qairt/2.39.0.250926)
+    endif()
+endif()
 
-file(COPY ${QNN_SDK_ROOT}/examples/QNN/SampleApp/SampleApp/
-    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SampleApp)
-execute_process(COMMAND git apply --directory=app/src/main/cpp/ --verbose ${CMAKE_CURRENT_SOURCE_DIR}/SampleApp.patch
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    RESULT_VARIABLE patch_result
-    OUTPUT_VARIABLE patch_output
-    ERROR_VARIABLE patch_error
-)
-message(STATUS "Patch: ${patch_result}")
-message(STATUS "Patch: ${patch_output}")
-message(STATUS "Patch: ${patch_error}")
+if(EXISTS "${QNN_SDK_ROOT}")
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SampleApp")
+        file(COPY ${QNN_SDK_ROOT}/examples/QNN/SampleApp/SampleApp/
+            DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SampleApp)
+        execute_process(COMMAND git apply --directory=app/src/main/cpp/ --verbose ${CMAKE_CURRENT_SOURCE_DIR}/SampleApp.patch
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            RESULT_VARIABLE patch_result
+            OUTPUT_VARIABLE patch_output
+            ERROR_VARIABLE patch_error
+        )
+        message(STATUS "Patch: ${patch_result}")
+        message(STATUS "Patch: ${patch_output}")
+        message(STATUS "Patch: ${patch_error}")
+    endif()
 
-make_directory(${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtp.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnSystem.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV68Stub.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV69Stub.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV73Stub.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV75Stub.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV79Stub.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV81Stub.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v68/unsigned/libQnnHtpV68.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v69/unsigned/libQnnHtpV69.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v69/unsigned/libQnnHtpV69Skel.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v73/unsigned/libQnnHtpV73.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v73/unsigned/libQnnHtpV73Skel.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v75/unsigned/libQnnHtpV75.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v75/unsigned/libQnnHtpV75Skel.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v79/unsigned/libQnnHtpV79.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v79/unsigned/libQnnHtpV79Skel.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v81/unsigned/libQnnHtpV81.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
-file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v81/unsigned/libQnnHtpV81Skel.so
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    make_directory(${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtp.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnSystem.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV68Stub.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV69Stub.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV73Stub.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV75Stub.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV79Stub.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/aarch64-android/libQnnHtpV81Stub.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v68/unsigned/libQnnHtpV68.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v69/unsigned/libQnnHtpV69.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v69/unsigned/libQnnHtpV69Skel.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v73/unsigned/libQnnHtpV73.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v73/unsigned/libQnnHtpV73Skel.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v75/unsigned/libQnnHtpV75.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v75/unsigned/libQnnHtpV75Skel.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v79/unsigned/libQnnHtpV79.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v79/unsigned/libQnnHtpV79Skel.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v81/unsigned/libQnnHtpV81.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+    file(COPY ${QNN_SDK_ROOT}/lib/hexagon-v81/unsigned/libQnnHtpV81Skel.so
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/qnnlibs)
+else()
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SampleApp")
+        message(FATAL_ERROR "Qualcomm QAIRT SDK directory '${QNN_SDK_ROOT}' was not found. Please set QNN_SDK_ROOT environment variable or CMake parameter pointing to Qualcomm AI Engine Direct (QNN) SDK 2.39.0.")
+    endif()
+endif()
 
 if(WIN32)
     set(PLATFORM_NAME "windows")
