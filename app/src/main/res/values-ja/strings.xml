@@ -344,6 +344,10 @@
     <string name="upgrade_model">モデルをアップグレード</string>
     <string name="upgrade_model_hint">%s の新しいバージョンが利用可能です。アップグレードしますか？</string>
     <string name="download_background_hint">ダウンロードはバックグラウンドで続行されます。他のアプリに切り替えることができます。</string>
+    <string name="pause">一時停止</string>
+    <string name="resume">再開</string>
+    <string name="paused">一時停止中</string>
+    <string name="download_paused">ダウンロードを一時停止しました</string>
     <string name="switch_resolution">解像度の切り替え</string>
     <string name="switch_resolution_hint">解像度を切り替えると、バックエンドサービスが再起動し、現在の生成が中断されます。続行しますか？</string>
     <string name="resolution">解像度</string>

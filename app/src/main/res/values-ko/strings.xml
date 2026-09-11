@@ -344,6 +344,10 @@
     <string name="upgrade_model">모델 업그레이드</string>
     <string name="upgrade_model_hint">%s의 새 버전을 사용할 수 있습니다. 업그레이드하시겠습니까?</string>
     <string name="download_background_hint">다운로드는 백그라운드에서 계속됩니다. 다른 앱으로 전환해도 됩니다.</string>
+    <string name="pause">일시 중지</string>
+    <string name="resume">재개</string>
+    <string name="paused">일시 중지됨</string>
+    <string name="download_paused">다운로드 일시 중지됨</string>
     <string name="switch_resolution">해상도 변경</string>
     <string name="switch_resolution_hint">해상도를 변경하면 백엔드 서비스가 다시 시작되고 현재 생성이 중단됩니다. 계속하시겠습니까?</string>
     <string name="resolution">해상도</string>

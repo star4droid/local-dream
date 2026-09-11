@@ -58,7 +58,8 @@ object TempCleaner {
         // Download scratch dir: only when no transfer is using it.
         val downloadActive = ModelDownloadService.downloadState.value.let { state ->
             state is ModelDownloadService.DownloadState.Downloading ||
-                state is ModelDownloadService.DownloadState.Extracting
+                state is ModelDownloadService.DownloadState.Extracting ||
+                state is ModelDownloadService.DownloadState.Paused
         }
         if (!downloadActive) {
             File(filesDir, "temp_downloads").takeIf { it.exists() }?.let { targets += it }

@@ -267,6 +267,7 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
     val msgRemoteOffline = stringResource(R.string.remote_banner_offline)
 
     var downloadingModel by remember { mutableStateOf<Model?>(null) }
+    var isDownloadPaused by remember { mutableStateOf(false) }
     var currentProgress by remember { mutableStateOf<DownloadProgress?>(null) }
     var downloadError by remember { mutableStateOf<String?>(null) }
     var showDownloadConfirm by remember { mutableStateOf<Model?>(null) }
@@ -326,6 +327,20 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
                     val model = modelRepository.models.find { it.id == state.modelId }
                     if (model != null) {
                         downloadingModel = model
+                        isDownloadPaused = false
+                        currentProgress = DownloadProgress(
+                            progress = state.progress,
+                            downloadedBytes = state.downloadedBytes,
+                            totalBytes = state.totalBytes,
+                        )
+                    }
+                }
+
+                is ModelDownloadService.DownloadState.Paused -> {
+                    val model = modelRepository.models.find { it.id == state.modelId }
+                    if (model != null) {
+                        downloadingModel = model
+                        isDownloadPaused = true
                         currentProgress = DownloadProgress(
                             progress = state.progress,
                             downloadedBytes = state.downloadedBytes,
@@ -338,6 +353,7 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
                     val model = modelRepository.models.find { it.id == state.modelId }
                     if (model != null) {
                         downloadingModel = model
+                        isDownloadPaused = false
                         currentProgress = null
                     }
                 }
@@ -345,6 +361,7 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
                 is ModelDownloadService.DownloadState.Success -> {
                     modelRepository.refreshModelState(state.modelId)
                     downloadingModel = null
+                    isDownloadPaused = false
                     currentProgress = null
                     // Fire-and-forget so the snackbar's display time does not
                     // block this collector from seeing further states.
@@ -353,6 +370,7 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
 
                 is ModelDownloadService.DownloadState.Error -> {
                     downloadingModel = null
+                    isDownloadPaused = false
                     currentProgress = null
                     downloadError = state.message
                 }
@@ -360,6 +378,7 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
                 is ModelDownloadService.DownloadState.Idle -> {
                     if (downloadingModel != null) {
                         downloadingModel = null
+                        isDownloadPaused = false
                         currentProgress = null
                     }
                 }
@@ -1918,7 +1937,11 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
         verticalSpacing = 24.dp,
     ) {
         Text(
-            text = stringResource(R.string.downloading_model, downloadingModel?.name ?: ""),
+            text = if (isDownloadPaused) {
+                stringResource(R.string.download_paused)
+            } else {
+                stringResource(R.string.downloading_model, downloadingModel?.name ?: "")
+            },
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
@@ -1944,6 +1967,38 @@ fun ModelListScreen(navController: NavController, modifier: Modifier = Modifier)
                     ),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (isDownloadPaused) {
+                        Button(
+                            onClick = { downloadingModel?.resumeDownload(context) },
+                        ) {
+                            Icon(Icons.Default.PlayArrow, contentDescription = stringResource(R.string.resume))
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.resume))
+                        }
+                    } else {
+                        OutlinedButton(
+                            onClick = { downloadingModel?.pauseDownload(context) },
+                        ) {
+                            Icon(Icons.Default.Pause, contentDescription = stringResource(R.string.pause))
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.pause))
+                        }
+                    }
+
+                    TextButton(
+                        onClick = { downloadingModel?.cancelDownload(context) },
+                    ) {
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.cancel))
+                        Spacer(Modifier.width(4.dp))
+                        Text(stringResource(R.string.cancel))
+                    }
+                }
             }
         } ?: Column(
             horizontalAlignment = Alignment.CenterHorizontally,

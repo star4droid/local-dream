@@ -354,6 +354,10 @@
     <string name="upgrade_model">Upgrade Model</string>
     <string name="upgrade_model_hint">A new version of %s is available. Do you want to upgrade?</string>
     <string name="download_background_hint">Download continues in the background. You can switch to other apps.</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="paused">Paused</string>
+    <string name="download_paused">Download paused</string>
     <string name="switch_resolution">Switch Resolution</string>
     <string name="switch_resolution_hint">Switching resolution will restart the backend service and interrupt current generation. Continue?</string>
     <string name="resolution">Resolution</string>

@@ -344,6 +344,10 @@
     <string name="upgrade_model">升级模型</string>
     <string name="upgrade_model_hint">%s 有新版本可用，是否要升级？</string>
     <string name="download_background_hint">下载将在后台继续进行，您可以切换到其他应用</string>
+    <string name="pause">暂停</string>
+    <string name="resume">继续</string>
+    <string name="paused">已暂停</string>
+    <string name="download_paused">下载已暂停</string>
     <string name="switch_resolution">切换分辨率</string>
     <string name="switch_resolution_hint">切换分辨率将重启后端服务，当前生成会被中断。是否继续？</string>
     <string name="resolution">分辨率</string>

@@ -162,6 +162,24 @@ data class Model(
         context.startForegroundService(intent)
     }
 
+    fun pauseDownload(context: Context) {
+        val intent = Intent(context, ModelDownloadService::class.java).apply {
+            action = ModelDownloadService.ACTION_PAUSE_DOWNLOAD
+        }
+        context.startService(intent)
+    }
+
+    fun resumeDownload(context: Context) {
+        startDownload(context)
+    }
+
+    fun cancelDownload(context: Context) {
+        val intent = Intent(context, ModelDownloadService::class.java).apply {
+            action = ModelDownloadService.ACTION_CANCEL_DOWNLOAD
+        }
+        context.startService(intent)
+    }
+
     suspend fun deleteModel(context: Context, keepHistory: Boolean = true): Boolean = withContext(Dispatchers.IO) {
         try {
             val modelDir = File(getModelsDir(context), id)
@@ -316,6 +334,24 @@ data class UpscalerModel(
         }
 
         context.startForegroundService(intent)
+    }
+
+    fun pauseDownload(context: Context) {
+        val intent = Intent(context, ModelDownloadService::class.java).apply {
+            action = ModelDownloadService.ACTION_PAUSE_DOWNLOAD
+        }
+        context.startService(intent)
+    }
+
+    fun resumeDownload(context: Context) {
+        startDownload(context)
+    }
+
+    fun cancelDownload(context: Context) {
+        val intent = Intent(context, ModelDownloadService::class.java).apply {
+            action = ModelDownloadService.ACTION_CANCEL_DOWNLOAD
+        }
+        context.startService(intent)
     }
 }
 
